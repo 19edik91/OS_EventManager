@@ -4,8 +4,7 @@
  *
  * ========================================
 */
-
-#include "EventManager.h"
+#include "OS_EventManager.h"
 
 /****************************************** Defines ******************************************************/
 
@@ -28,7 +27,7 @@ static u8 ucEventsCnt = 0;
 #endif
 
 /****************************************** Function prototypes ******************************************/
-static bool EVT_PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventParam2 ulEvtParam2);
+static bool PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventParam2 ulEvtParam2);
 
 
 /****************************************** loacl functiones *********************************************/
@@ -36,23 +35,16 @@ static bool EVT_PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventP
 /*!
 \author     Kraemer E
 \date       20.01.2019
-
-\fn         EVT_PutEvent
-
 \brief      Insert a new event at the end of the queue, and fills in the information
             given in the parameters.
             Function is not interrupt safe, and should be called only from inside
             the module.
-
 \return     bReturnVal  - True if event could be inserted, false if not (queue full)
-
 \param      eEventId    - Id of the new event
-
 \param      uiEvtParam1 - parameter1 of the event
-
 \param      ulEvtParam2 - parameter2 of the event
 ***********************************************************************************/
-static bool EVT_PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventParam2 ulEvtParam2)
+static bool PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventParam2 ulEvtParam2)
 {
     bool bReturnVal = false;
     
@@ -93,19 +85,13 @@ static bool EVT_PutEvent(teEventID eEventId, uiEventParam1 uiEvtParam1, ulEventP
 /*!
 \author     Kraemer E
 \date       20.01.2019
-
-\fn         EVT_GetEvent
-
 \brief      Gets the event at the front of the queue an removes it. Tha data is
             copied into the buffer given as parameter.
             Function is interrupt safe.
-
 \return     bReturnVal - true if an event was retrieved, false if not
-
 \param      psEventMsg *pEvt - pointer to the event structure which is to be filled
-
 ***********************************************************************************/
-bool EVT_GetEvent(tsEventMsg* psEventMsgGet)
+bool OS_EVT_GetEvent(tsEventMsg* psEventMsgGet)
 {
     bool bReturnVal = false;
     
@@ -113,7 +99,7 @@ bool EVT_GetEvent(tsEventMsg* psEventMsgGet)
     if(ucEventsCnt)
     {
         //Save interrupts first
-        const u32 ulSavedIntrStatus = EVT_EnterCritical();
+        const u32 ulSavedIntrStatus = EnterCritical();
 
         tsEventMsg* psEventMsgFromQueue = &EventQueue[ucGetIdx];
 
@@ -134,7 +120,7 @@ bool EVT_GetEvent(tsEventMsg* psEventMsgGet)
         bReturnVal = true;
 
         /* Enable interrupts again */
-        EVT_LeaveCritical(ulSavedIntrStatus);
+        LeaveCritical(ulSavedIntrStatus);
     }
     
     return bReturnVal;
@@ -145,32 +131,26 @@ bool EVT_GetEvent(tsEventMsg* psEventMsgGet)
 /*!
 \author     Kraemer E
 \date       20.01.2019
-
-\fn         EVT_PostEvent
-
 \brief      Puts a new event at the end of the event queue, given the information
             from the parameters.
             Function is interrupt safe.
-
 \return     u8              - 1 if event could be inserted, 0 if not (queue full)
-
 \param      EVENT_ID id     - id of the new event
 \param      EVENT_PARAM1 p1 - parameter1 of the event (can be any 16-bit data)
 \param      EVENT_PARAM2 p2 - parameter2 of the event (can be any 32-bit data)
-
 ***********************************************************************************/
-bool EVT_PostEvent(teEventID eEventId, uiEventParam1 uiEventParam1, ulEventParam2 ulEventParam2)
+bool OS_EVT_PostEvent(teEventID eEventId, uiEventParam1 uiEventParam1, ulEventParam2 ulEventParam2)
 {   
     bool bReturnVal = false;
 
     /* Enter critical section -> save interrupts */
-    const u32 ulSavedIntrStatus = EVT_EnterCritical();
+    const u32 ulSavedIntrStatus = EnterCritical();
 
     /* Put event into queue and save status */
-    bReturnVal = EVT_PutEvent(eEventId, uiEventParam1, ulEventParam2);
+    bReturnVal = PutEvent(eEventId, uiEventParam1, ulEventParam2);
 
     /* Leave critival section -> enable interrupts again */
-    EVT_LeaveCritical(ulSavedIntrStatus);
+    LeaveCritical(ulSavedIntrStatus);
     
     return bReturnVal;
 }

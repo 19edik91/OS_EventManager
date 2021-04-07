@@ -8,13 +8,12 @@
             getting events.
 
 ***********************************************************************************/
+#ifndef _OS_EVENTMANAGER_H_
+#define _OS_EVENTMANAGER_H_
 
 
-#ifndef _EVENTMGR_H_
-#define _EVENTMGR_H_
-
-#include <project.h>
 #include "BaseTypes.h"
+#include "OS_Config.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -22,15 +21,15 @@ extern "C"
 #endif
 
 // Maximum number of events in the queue
-#define MAX_EVENT_QUEUE 16
+#ifndef MAX_EVENT_QUEUE
+    #define MAX_EVENT_QUEUE 16
+#endif
 
-#define EVT_EnterCritical()  CyDisableInts()
-#define EVT_LeaveCritical(A) CyEnableInts(A)
 
 typedef enum
 {
-    eEvtNone ,
-    eEvtTimer ,
+    eEvtNone,
+    eEvtSoftwareTimer ,
     eEvtSerialMsgReceived,
     eEvtSerialMsgSend,
     eEvtNewRegulationValue,
@@ -75,11 +74,11 @@ typedef enum
     eEvtParam_TimeFromRtc
 } teEventParam;
 
-bool EVT_GetEvent(tsEventMsg* psEventMsg);
-bool EVT_PostEvent(teEventID eEvtID, uiEventParam1 uiEvtParam1, ulEventParam2 uiEvtParam2);
+bool OS_EVT_GetEvent(tsEventMsg* psEventMsg);
+bool OS_EVT_PostEvent(teEventID eEvtID, uiEventParam1 uiEvtParam1, ulEventParam2 uiEvtParam2);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _EVENTMGR_H_
+#endif // _OS_EVENTMANAGER_H_
