@@ -43,9 +43,11 @@ typedef enum
     eEvtCommTimeout,
     eEvtSoftwareTimerCreate,
     eEvtSoftwareTimerAsyncCreate,
+    eEvtSoftwareTimerDelete,
     eEvtSoftwareTimerStart,
     eEvtSoftwareTimerSuspend,
     eEvtEnterResetState,
+    eEvtState_Request,
     eEvtLast
 }teEventID;
 
