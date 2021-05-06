@@ -14,6 +14,7 @@
 
 #include "BaseTypes.h"
 #include "OS_Config.h"
+#include "Project_Config.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -48,6 +49,13 @@ typedef enum
     eEvtSoftwareTimerSuspend,
     eEvtEnterResetState,
     eEvtState_Request,
+    
+    #ifdef USER_EVENT_LIST
+        #define EVT(eEventName) eEventName,
+            USER_EVENT_LIST
+        #undef EVT
+    #endif
+    
     eEvtLast
 }teEventID;
 
