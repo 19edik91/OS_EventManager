@@ -29,33 +29,26 @@ extern "C"
 
 typedef enum
 {
-    eEvtNone,
-    eEvtSoftwareTimer ,
+    eEvtNone,    
     eEvtSerialMsgReceived,
     eEvtSerialMsgSend,
-    eEvtNewRegulationValue,
-    eEvtInitRegulationValue,
     eEvtPower,
     eEvtEnterBoot,
     eEvtError,
     eEvtSendError,
-    eEvtStandby,
-    eEvtTimeReceived,
-    eEvtCommTimeout,
+    eEvtSoftwareTimer ,
     eEvtSoftwareTimerCreate,
     eEvtSoftwareTimerAsyncCreate,
     eEvtSoftwareTimerDelete,
     eEvtSoftwareTimerStart,
     eEvtSoftwareTimerSuspend,
     eEvtEnterResetState,
-    eEvtState_Request,
-    
+    eEvtState_Request,    
     #ifdef USER_EVENT_LIST
         #define EVT(eEventName) eEventName,
             USER_EVENT_LIST
         #undef EVT
-    #endif
-    
+    #endif    
     eEvtLast
 }teEventID;
 
