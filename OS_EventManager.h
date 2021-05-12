@@ -44,6 +44,7 @@ typedef enum
     eEvtSoftwareTimerSuspend,
     eEvtEnterResetState,
     eEvtState_Request,    
+    eEvtErrorHandling,    
     #ifdef USER_EVENT_LIST
         #define EVT(eEventName) eEventName,
             USER_EVENT_LIST
@@ -79,7 +80,9 @@ typedef enum
     eEvtParam_InitRegulationStart,
     eEvtParam_InitRegulationDone,
     eEvtParam_TimeFromNtpClient,
-    eEvtParam_TimeFromRtc
+    eEvtParam_TimeFromRtc,
+    eEvtParam_ErrorToManyErrors,
+    eEvtParam_ErrorInvalidSlot
 } teEventParam;
 
 bool OS_EVT_GetEvent(tsEventMsg* psEventMsg);
