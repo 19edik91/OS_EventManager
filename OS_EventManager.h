@@ -82,7 +82,13 @@ typedef enum
     eEvtParam_TimeFromNtpClient,
     eEvtParam_TimeFromRtc,
     eEvtParam_ErrorToManyErrors,
-    eEvtParam_ErrorInvalidSlot
+    eEvtParam_ErrorInvalidSlot,
+    #ifdef USER_EVENTPARAM_LIST
+        #define EVTP(eEventParamName) eEventParamName,
+            USER_EVENTPARAM_LIST
+        #undef EVT
+    #endif    
+    eEvtParam_Last
 } teEventParam;
 
 bool OS_EVT_GetEvent(tsEventMsg* psEventMsg);
