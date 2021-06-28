@@ -5,6 +5,8 @@
  * ========================================
 */
 #include "OS_EventManager.h"
+#include "HAL_System.h"
+
 
 #include "TargetConfig.h"
 #ifdef ESPRESSIF_ESP8266
@@ -104,7 +106,7 @@ bool OS_EVT_GetEvent(tsEventMsg* psEventMsgGet)
     if(ucEventsCnt)
     {
         //Save interrupts first
-        const u32 ulSavedIntrStatus = EnterCritical();
+        HAL_System_EnterCriticalSection();
 
         tsEventMsg* psEventMsgFromQueue = &EventQueue[ucGetIdx];
 
@@ -125,7 +127,7 @@ bool OS_EVT_GetEvent(tsEventMsg* psEventMsgGet)
         bReturnVal = true;
 
         /* Enable interrupts again */
-        LeaveCritical(ulSavedIntrStatus);
+        HAL_System_LeaveCriticalSection();
     }
     
     return bReturnVal;
@@ -149,13 +151,13 @@ bool OS_EVT_PostEvent(teEventID eEventId, uiEventParam1 uiEventParam1, ulEventPa
     bool bReturnVal = false;
 
     /* Enter critical section -> save interrupts */
-    const u32 ulSavedIntrStatus = EnterCritical();
+    HAL_System_EnterCriticalSection();
 
     /* Put event into queue and save status */
     bReturnVal = PutEvent(eEventId, uiEventParam1, ulEventParam2);
 
     /* Leave critival section -> enable interrupts again */
-    LeaveCritical(ulSavedIntrStatus);
+    HAL_System_LeaveCriticalSection();
     
     return bReturnVal;
 }
