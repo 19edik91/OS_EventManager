@@ -44,7 +44,8 @@ typedef enum
     eEvtSoftwareTimerSuspend,
     eEvtEnterResetState,
     eEvtState_Request,    
-    eEvtErrorHandling,    
+    eEvtErrorHandling,   
+    eEvtExecuteSoftwareReset,
     #ifdef USER_EVENT_LIST
         #define EVT(eEventName) eEventName,
             USER_EVENT_LIST
