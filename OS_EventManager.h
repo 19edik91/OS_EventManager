@@ -11,27 +11,31 @@
 #ifndef _OS_EVENTMANAGER_H_
 #define _OS_EVENTMANAGER_H_
 
-
-#include "BaseTypes.h"
+/********************************* includes **********************************/
 #include "OS_Config.h"
+#include "BaseTypes.h"
 #include "Project_Config.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
+    
+/***************************** defines / macros ******************************/
 // Maximum number of events in the queue
 #ifndef MAX_EVENT_QUEUE
     #define MAX_EVENT_QUEUE 16
 #endif
 
+/* Create events for serial uart */
+#if USE_OS_SERIAL_UART
+#define EVT_SERIAL_UART \
+    eEvtSerialMsgReceived,\
+    eEvtSerialMsgSend,
+#else
+#define EVT_SERIAL_UART
+#endif
 
+/****************************** type definitions *****************************/
 typedef enum
 {
-    eEvtNone,    
-    eEvtSerialMsgReceived,
-    eEvtSerialMsgSend,
+    eEvtNone,   
+    EVT_SERIAL_UART
     eEvtPower,
     eEvtEnterBoot,
     eEvtError,
@@ -91,6 +95,14 @@ typedef enum
     #endif    
     eEvtParam_Last
 } teEventParam;
+/***************************** global variables ******************************/
+
+
+/************************ externally visible functions ***********************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 bool OS_EVT_GetEvent(tsEventMsg* psEventMsg);
 bool OS_EVT_PostEvent(teEventID eEvtID, uiEventParam1 uiEvtParam1, ulEventParam2 uiEvtParam2);
