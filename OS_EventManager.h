@@ -31,6 +31,15 @@
 #define EVT_SERIAL_UART
 #endif
 
+/* Create empty user events when not defined */
+#ifndef USER_EVENT_LIST
+    #define USER_EVENT_LIST    
+#endif
+
+#ifndef USER_EVENTPARAM_LIST
+    #define USER_EVENTPARAM_LIST
+#endif
+
 /****************************** type definitions *****************************/
 typedef enum
 {
@@ -50,11 +59,7 @@ typedef enum
     eEvtState_Request,    
     eEvtErrorHandling,   
     eEvtExecuteSoftwareReset,
-    #ifdef USER_EVENT_LIST
-        #define EVT(eEventName) eEventName,
-            USER_EVENT_LIST
-        #undef EVT
-    #endif    
+    USER_EVENT_LIST 
     eEvtLast
 }teEventID;
 
@@ -88,11 +93,7 @@ typedef enum
     eEvtParam_TimeFromRtc,
     eEvtParam_ErrorToManyErrors,
     eEvtParam_ErrorInvalidSlot,
-    #ifdef USER_EVENTPARAM_LIST
-        #define EVTP(eEventParamName) eEventParamName,
-            USER_EVENTPARAM_LIST
-        #undef EVT
-    #endif    
+    USER_EVENTPARAM_LIST
     eEvtParam_Last
 } teEventParam;
 /***************************** global variables ******************************/
